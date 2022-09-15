@@ -36,3 +36,19 @@ function operate(operator, firstNumber, secondNumber) {
 
   return result;
 }
+
+const numberButtons = document.querySelectorAll(".number");
+numberButtons.forEach((button) => {
+  const number = parseInt(button.textContent);
+  button.addEventListener("click", (e) => displayNumberToScreen(number));
+});
+
+const screen = document.querySelector(".screen");
+let displayValue = 0;
+
+function displayNumberToScreen(number) {
+  if (screen.textContent.length < 9) {
+    screen.textContent += String(number);
+    displayValue = parseInt(screen.textContent);
+  }
+}
