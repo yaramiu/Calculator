@@ -9,3 +9,23 @@ body {
   align-items: center;
   height: 100vh;
 }
+
+.screen {
+  width: 212px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 40px;
+  background-color: white;
+}
+
+button {
+  width: 50px;
+  background-color: white;
+  color: black;
+}
+
+.screen,
+button {
+  height: 50px;
+}

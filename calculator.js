@@ -72,18 +72,26 @@ function displayNumberToScreen(number) {
 
 const operatorButtons = document.querySelectorAll(".operator");
 operatorButtons.forEach((button) => {
-  button.addEventListener("click", () => clickOperatorButton(button));
+  button.addEventListener("click", () => {
+    clickOperatorButton();
+    operator = button.textContent;
+  });
 
   document.addEventListener("keypress", (event) => {
     if (event.key === button.textContent) {
-      clickOperatorButton(button);
+      clickOperatorButton();
+      operator = button.textContent;
     }
   });
 });
 
-function clickOperatorButton(button) {
+function clickOperatorButton() {
+  if (isEqualsButtonClicked) {
+    isEqualsButtonClicked = false;
+    firstNumber = null;
+  }
+
   isOperatorButtonClicked = true;
-  isEqualsButtonClicked = false;
 
   if (firstNumber === null) {
     firstNumber = displayValue;
@@ -108,8 +116,6 @@ function clickOperatorButton(button) {
     firstNumber = displayValue;
     secondNumber = 0;
   }
-
-  operator = button.textContent;
 }
 
 const equalsButton = document.querySelector(".equals-button");
@@ -125,6 +131,7 @@ function clickEqualsButton() {
     return;
   }
   isEqualsButtonClicked = true;
+  isOperatorButtonClicked = false;
 
   if (firstNumber === null && secondNumber === undefined) {
     return;
@@ -149,7 +156,6 @@ function clickEqualsButton() {
   screen.textContent = displayValue;
   firstNumber = displayValue;
   secondNumber = 0;
-  displayValue = 0;
 }
 
 const clearButton = document.querySelector(".clear-button");
@@ -194,4 +200,5 @@ function clickBackspaceButton() {
     0,
     screen.textContent.length - 1
   );
+  displayValue = Number(screen.textContent);
 }
