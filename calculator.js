@@ -35,12 +35,6 @@ function operate(operator, firstNumber, secondNumber) {
   return result;
 }
 
-const numberButtons = document.querySelectorAll(".number");
-numberButtons.forEach((button) => {
-  const number = parseInt(button.textContent);
-  button.addEventListener("click", () => displayNumberToScreen(number));
-});
-
 const screen = document.querySelector(".screen");
 let displayValue = 0;
 let firstNumber = null;
@@ -48,6 +42,18 @@ let secondNumber;
 let operator;
 let isOperatorButtonClicked = false;
 let isEqualsButtonClicked = false;
+
+const numberButtons = document.querySelectorAll(".number");
+numberButtons.forEach((button) => {
+  const number = parseInt(button.textContent);
+  button.addEventListener("click", () => displayNumberToScreen(number));
+
+  document.addEventListener("keypress", (event) => {
+    if (event.key === button.textContent) {
+      displayNumberToScreen(number);
+    }
+  });
+});
 
 function displayNumberToScreen(number) {
   isEqualsButtonClicked = false;
@@ -66,41 +72,55 @@ function displayNumberToScreen(number) {
 
 const operatorButtons = document.querySelectorAll(".operator");
 operatorButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    isOperatorButtonClicked = true;
-    isEqualsButtonClicked = false;
+  button.addEventListener("click", () => clickOperatorButton(button));
 
-    if (firstNumber === null) {
-      firstNumber = displayValue;
-    } else {
-      secondNumber = displayValue;
-
-      displayValue = operate(operator, firstNumber, secondNumber);
-
-      displayValue = +(Math.round(displayValue + "e+8") + "e-8");
-
-      if (displayValue === Infinity || isNaN(displayValue)) {
-        screen.textContent = "Nice try";
-        firstNumber = 0;
-        secondNumber = 0;
-        return;
-      }
-
-      if (String(displayValue).length > 9) {
-        displayValue = String(displayValue).substring(0, 9);
-      }
-
-      screen.textContent = displayValue;
-      firstNumber = displayValue;
-      secondNumber = 0;
+  document.addEventListener("keypress", (event) => {
+    if (event.key === button.textContent) {
+      clickOperatorButton(button);
     }
-
-    operator = button.textContent;
   });
 });
 
+function clickOperatorButton(button) {
+  isOperatorButtonClicked = true;
+  isEqualsButtonClicked = false;
+
+  if (firstNumber === null) {
+    firstNumber = displayValue;
+  } else {
+    secondNumber = displayValue;
+
+    displayValue = operate(operator, firstNumber, secondNumber);
+    displayValue = +(Math.round(displayValue + "e+8") + "e-8");
+
+    if (displayValue === Infinity || isNaN(displayValue)) {
+      screen.textContent = "Nice try";
+      firstNumber = 0;
+      secondNumber = 0;
+      return;
+    }
+
+    if (String(displayValue).length > 9) {
+      displayValue = String(displayValue).substring(0, 9);
+    }
+
+    screen.textContent = displayValue;
+    firstNumber = displayValue;
+    secondNumber = 0;
+  }
+
+  operator = button.textContent;
+}
+
 const equalsButton = document.querySelector(".equals-button");
-equalsButton.addEventListener("click", () => {
+equalsButton.addEventListener("click", () => clickEqualsButton());
+document.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    clickEqualsButton();
+  }
+});
+
+function clickEqualsButton() {
   if (isEqualsButtonClicked) {
     return;
   }
@@ -113,7 +133,6 @@ equalsButton.addEventListener("click", () => {
   secondNumber = displayValue;
 
   displayValue = operate(operator, firstNumber, secondNumber);
-
   displayValue = +(Math.round(displayValue + "e+8") + "e-8");
 
   if (displayValue === Infinity || isNaN(displayValue)) {
@@ -131,10 +150,12 @@ equalsButton.addEventListener("click", () => {
   firstNumber = displayValue;
   secondNumber = 0;
   displayValue = 0;
-});
+}
 
 const clearButton = document.querySelector(".clear-button");
-clearButton.addEventListener("click", () => {
+clearButton.addEventListener("click", () => resetData());
+
+function resetData() {
   displayValue = 0;
   firstNumber = null;
   secondNumber = 0;
@@ -142,21 +163,35 @@ clearButton.addEventListener("click", () => {
   isOperatorButtonClicked = false;
   isEqualsButtonClicked = false;
   screen.textContent = "";
-});
+}
 
 const decimalButton = document.querySelector(".decimal-button");
-decimalButton.addEventListener("click", () => {
+decimalButton.addEventListener("click", () => addDecimal());
+document.addEventListener("keypress", (event) => {
+  if (event.key === decimalButton.textContent) {
+    addDecimal();
+  }
+});
+
+function addDecimal() {
   if (screen.textContent.includes(".")) {
     return;
   }
 
   screen.textContent += ".";
-});
+}
 
 const backspaceButton = document.querySelector(".backspace-button");
-backspaceButton.addEventListener("click", () => {
+backspaceButton.addEventListener("click", () => clickBackspaceButton());
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Backspace") {
+    clickBackspaceButton();
+  }
+});
+
+function clickBackspaceButton() {
   screen.textContent = screen.textContent.substring(
     0,
     screen.textContent.length - 1
   );
-});
+}
