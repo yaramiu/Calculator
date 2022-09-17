@@ -8,6 +8,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: black;
+  flex: 0 1 auto;
 }
 
 .screen {
@@ -15,17 +17,35 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  font-size: 40px;
+  font-size: 36px;
   background-color: white;
+  border-radius: 4px;
+  margin-bottom: 4px;
 }
 
 button {
   width: 50px;
-  background-color: white;
-  color: black;
+  background-color: rgb(20, 19, 19);
+  color: white;
+  font-size: 24px;
+  border-radius: 8px;
 }
 
 .screen,
 button {
   height: 50px;
+}
+
+.operator,
+.equals-button {
+  background-color: orange;
+  color: white;
+}
+
+.clear-button {
+  background-color: grey;
+}
+
+.equals-button {
+  width: 158px;
 }
